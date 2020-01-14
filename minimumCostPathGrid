@@ -1,0 +1,76 @@
+/*package whatever //do not write package name here */
+
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+
+class GFG {
+    static int[][]dist;
+    static boolean [][] v;
+    
+    static boolean isSafe(int x,int y,int n,int m)
+    {
+        return (x>=0 && x<n && y>=0 && y<m && !v[x][y]);
+    }
+    static int minCostPath(int[][]arr,int x,int y,int dx,int dy)
+    {
+        class node
+    {
+        int x,y,d;
+        node(int x,int y,int d)
+        {
+            this.x=x;this.y=y;this.d=d;
+        }
+    }
+        PriorityQueue<node> q=new PriorityQueue<node>(new Comparator<node>(){
+            public int compare(node n1,node n2)
+            {
+                return n1.d-n2.d;
+            }
+            });
+            int [] xn={-1,0,0,1};
+            int[] yn={0,-1,1,0};
+            v[x][y]=true;
+            dist[x][y]=arr[x][y];
+            q.add(new node(x,y,arr[x][y]));
+            node n;
+            while(q.size()>0)
+            {
+                n=q.poll();
+                for(int i=0;i<xn.length;i++)
+                {
+                    x=n.x+xn[i];
+                    y=n.y+yn[i];
+                    if(isSafe(x,y,arr.length,arr[0].length))
+                    {
+                        v[x][y]=true;
+                        if(dist[x][y]>arr[x][y]+n.d)
+                        dist[x][y]=arr[x][y]+n.d;
+                        q.add(new node(x,y,dist[x][y]));
+                    }
+                }
+            }
+            return dist[dx][dy];
+    }
+	public static void main (String[] args) {
+		//code
+		Scanner sc=new Scanner(System.in);
+int t=sc.nextInt();
+while(t-->0)
+{
+int n=sc.nextInt();
+int[][] arr=new int[n][n];
+    dist=new int[n][n];
+    v=new boolean[n][n];
+for(int i=0;i<n;i++)
+{
+    for(int j=0;j<n;j++)
+    {
+        arr[i][j]=sc.nextInt();
+        dist[i][j]=Integer.MAX_VALUE;
+    }
+} 
+     System.out.println(minCostPath(arr,0,0,n-1,n-1));
+}
+	}
+}
